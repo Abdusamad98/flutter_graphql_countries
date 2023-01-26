@@ -20,8 +20,10 @@ class JobsBloc extends Bloc<JobsEvent, JobsState> {
   ) async {
     emit(JobsLoadInProgress());
     try {
-      final jobs = await _jobsApiClient.getJobs();
-      emit(JobsLoadSuccess(jobs));
+      final countries = await _jobsApiClient.getCountries();
+      final singleCountry = await _jobsApiClient.getCountryById("UZ");
+      print("COUNTRY NAME:${singleCountry.name}");
+      emit(JobsLoadSuccess(countries));
     } catch (error) {
       print("ERRROR:$error");
       emit(JobsLoadFailure());

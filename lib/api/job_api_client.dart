@@ -16,10 +16,9 @@ class JobsApiClient {
     );
   }
 
-
   final GraphQLClient _graphQLClient;
 
-  Future<List<CountryModel>> getJobs() async {
+  Future<List<CountryModel>> getCountries() async {
     final result = await _graphQLClient.query(
       QueryOptions(document: gql(queries.getJobs)),
     );
@@ -29,5 +28,27 @@ class JobsApiClient {
     return data
         .map((dynamic e) => CountryModel.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<CountryModel> getCountryById(String code) async {
+    final result = await _graphQLClient.mutate(
+      MutationOptions(
+        variables: {'code': code},
+        document: gql(r'''
+         query GetCountryByCode($code:ID!){
+         country(code: $code) {
+              name
+              native
+              capital
+              emoji
+              currency
+            }
+         }
+        '''),
+      ),
+    );
+    if (result.hasException) throw GetJobsRequestFailure();
+    final data = result.data?['country'] as Map<String, dynamic>;
+    return CountryModel.fromJson(data);
   }
 }
