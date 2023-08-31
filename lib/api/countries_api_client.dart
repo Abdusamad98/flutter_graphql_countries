@@ -4,14 +4,15 @@ import 'package:graphql/client.dart';
 
 class GetJobsRequestFailure implements Exception {}
 
-class JobsApiClient {
-  const JobsApiClient({required GraphQLClient graphQLClient})
+class CountriesApiClient {
+  const CountriesApiClient({required GraphQLClient graphQLClient})
       : _graphQLClient = graphQLClient;
 
-  factory JobsApiClient.create() {
+  factory CountriesApiClient.create() {
     final httpLink = HttpLink('https://countries.trevorblades.com');
     final link = Link.from([httpLink]);
-    return JobsApiClient(
+
+    return CountriesApiClient(
       graphQLClient: GraphQLClient(cache: GraphQLCache(), link: link),
     );
   }
@@ -22,33 +23,45 @@ class JobsApiClient {
     final result = await _graphQLClient.query(
       QueryOptions(document: gql(queries.getJobs)),
     );
+
     if (result.hasException) throw GetJobsRequestFailure();
-    final data = result.data?['countries'] as List;
     print("SUCCESS DATA:${result.data.toString()}");
-    return data
-        .map((dynamic e) => CountryModel.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return (result.data?['countries'] as List?)
+            ?.map(
+              (dynamic e) => CountryModel.fromJson(e as Map<String, dynamic>),
+            )
+            .toList() ??
+        [];
   }
 
   Future<CountryModel> getCountryById(String code) async {
-    final result = await _graphQLClient.mutate(
-      MutationOptions(
+    final result = await _graphQLClient.query(
+      QueryOptions(
         variables: {'code': code},
         document: gql(r'''
          query GetCountryByCode($code:ID!){
          country(code: $code) {
-              name
-              native
-              capital
-              emoji
-              currency
-            }
+         name native
+         continent{ code }
+         capital
+         emoji
+         currency
+         emojiU
+         awsRegion
+         phones
+         languages {
+            code
+           name
          }
+       }
+      }
         '''),
       ),
     );
     if (result.hasException) throw GetJobsRequestFailure();
     final data = result.data?['country'] as Map<String, dynamic>;
+
+    print("SINGLE COUNTRY:${result.data?['country']}");
     return CountryModel.fromJson(data);
   }
 }
