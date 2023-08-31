@@ -4,6 +4,7 @@ const getJobs = '''
     name
     native
     capital
+    code
     emoji
     currency
     }

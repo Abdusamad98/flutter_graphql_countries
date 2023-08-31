@@ -8,7 +8,7 @@ class SingleCountryLoading extends SingleCountryState {}
 class SingleCountrySuccess extends SingleCountryState {
   SingleCountrySuccess(this.countryModel);
 
-  final CountryModel countryModel;
+  final CountryDetailModel countryModel;
 }
 
 class SingleCountryFailure extends SingleCountryState {}

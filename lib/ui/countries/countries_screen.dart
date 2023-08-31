@@ -19,17 +19,19 @@ class CountriesScreen extends StatelessWidget {
             }
             if (state is CountriesLoadSuccess) {
               return ListView.builder(
-                itemCount: state.jobs.length,
+                itemCount: state.countries.length,
                 itemBuilder: (context, index) {
-                  final country = state.jobs[index];
+                  final country = state.countries[index];
                   return ListTile(
                     onTap: () {
-                      context.read<SingleCountryBloc>().add(SingleCountryFetch(code: country.code));
+                      //context.read<SingleCountryBloc>().add(SingleCountryFetch(code: country.code));
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return CountryDetailScreen();
+                            return CountryDetailScreen(
+                              countryCode: country.code,
+                            );
                           },
                         ),
                       );

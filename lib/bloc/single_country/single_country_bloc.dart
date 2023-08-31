@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_graphql_jobs/api/api.dart';
+import 'package:flutter_graphql_jobs/api/models/country_detail_model.dart';
 import 'package:meta/meta.dart';
 
 part 'signle_country_event.dart';

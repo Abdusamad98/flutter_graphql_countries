@@ -6,9 +6,9 @@ abstract class CountriesState {}
 class CountriesLoadInProgress extends CountriesState {}
 
 class CountriesLoadSuccess extends CountriesState {
-  CountriesLoadSuccess(this.jobs);
+  CountriesLoadSuccess(this.countries);
 
-  final List<CountryModel> jobs;
+  final List<CountryModel> countries;
 }
 
 class CountriesLoadFailure extends CountriesState {}

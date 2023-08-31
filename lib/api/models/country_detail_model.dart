@@ -1,7 +1,7 @@
 
 
 class CountryDetailModel {
-  const CountryDetailModel({
+   CountryDetailModel({
     required this.name,
     required this.capital,
     required this.currency,
